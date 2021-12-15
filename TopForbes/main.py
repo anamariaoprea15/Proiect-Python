@@ -31,8 +31,9 @@ def create_table(conn, statement):
 
 def insert_row(conn, values):
     stmt = ''' INSERT INTO billionaires
-                (rank, personName, age, country, countryOfCitizenship, philanthropyScore, finalWorth)
-                 VALUES(?,?,?,?,?,?,?) '''
+                (rank, personName, age, country, countryOfCitizenship,
+                 philanthropyScore, finalWorth, sourceOfWealth, selfMadeRank)
+                 VALUES(?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(stmt, values)
     conn.commit()
@@ -95,7 +96,9 @@ if __name__ == '__main__':
                                             country text NOT NULL,
                                             countryOfCitizenship text NOT NULL,
                                             philanthropyScore integer,
-                                            finalWorth real NOT NULL
+                                            finalWorth real NOT NULL,
+                                            sourceOfWealth text,
+                                            selfMadeRank integer
                                         ); """
 
     create_table(con, stmt_create)
@@ -111,7 +114,8 @@ if __name__ == '__main__':
         persons_lists = person_list_dict["personsLists"]  # list of billionaires
         for p in persons_lists:
             values_to_insert = (p.get('rank'), p.get('personName'), p.get('age'), p.get('country'),
-                                p.get('countryOfCitizenship'), p.get('philanthropyScore'), p.get('finalWorth'))
+                                p.get('countryOfCitizenship'), p.get('philanthropyScore'), p.get('finalWorth'),
+                                p.get('source'), p.get('selfMadeRank'))
             insert_row(con, values_to_insert)
 
         top_10_yougest(con)
