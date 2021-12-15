@@ -30,7 +30,8 @@ def create_table(conn, statement):
 
 
 def insert_row(conn, values):
-    stmt = ''' INSERT INTO billionaires(rank, personName, age, country, countryOfCitizenship, philanthropyScore, finalWorth)
+    stmt = ''' INSERT INTO billionaires
+                (rank, personName, age, country, countryOfCitizenship, philanthropyScore, finalWorth)
                  VALUES(?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(stmt, values)
@@ -54,7 +55,6 @@ def top_10_yougest(conn):
 
 
 def count_american_citizenship(conn):
-
     stmt = '''SELECT COUNT(*) FROM billionaires
             WHERE countryOfCitizenship LIKE 'United States' '''
 
@@ -64,7 +64,8 @@ def count_american_citizenship(conn):
     count = cur.fetchone()
 
     print("Billionaires with american citizenship:", count[0])
-    print("Billionaires with other citizenship:", 200-count[0])
+    print("Billionaires with other citizenship:", 200 - count[0])
+
 
 def top_10_philantropic_score(conn):
     stmt = '''SELECT personName, philanthropyScore FROM billionaires
@@ -80,13 +81,14 @@ def top_10_philantropic_score(conn):
     for row in rows:
         print(row)
 
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
     con = create_connection('forbes.db')
     cursor = con.cursor()
     cursor.execute("DROP TABLE billionaires")
-    stmt = """ CREATE TABLE IF NOT EXISTS billionaires (
+    stmt_create = """ CREATE TABLE IF NOT EXISTS billionaires (
                                             rank integer NOT NULL,
                                             personName text NOT NULL,
                                             age integer,
@@ -96,7 +98,7 @@ if __name__ == '__main__':
                                             finalWorth real NOT NULL
                                         ); """
 
-    create_table(con, stmt)
+    create_table(con, stmt_create)
 
     try:
         req = urllib.request.Request(url_forbes, None, headers)
